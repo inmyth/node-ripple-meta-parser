@@ -3,7 +3,7 @@
 
 #### Make module from Browserify
 ```
-npm install browserify -g
+npm install -g browserify
 
 browserify main.js --s metaparser > metaparser.js
 ```
@@ -11,5 +11,5 @@ browserify main.js --s metaparser > metaparser.js
 Then in html
 ```
 
-<script>metaparser.orderChanges(text);</script>
+<script>metaparser.orderChanges(text, myRippleAddress, true);</script>
 ```
