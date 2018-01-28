@@ -22,9 +22,12 @@
 					<h5>Paste /transactions from Ripple Data Api</h5>
 					<p>example: <a href="https://data.ripple.com/v2/accounts/raNDu1gNyZ5hipBTKxm5zx7NovA1rNnNRf/transactions?result=tesSUCCESS&limit=40&start=2018-01-26&end=2018-01-29&descending=true">
 						https://data.ripple.com/v2/accounts/raNDu1gNyZ5hipBTKxm5zx7NovA1rNnNRf/transactions?result=tesSUCCESS&limit=40&start=2018-01-26&end=2018-01-29&descending=true<a/></p>
-
 					<textarea class="form-control" id="ta" rows="10"></textarea>
 				</div>
+				<div class="form-group">
+			    <input type="text" class="form-control" id="address" aria-describedby="addressHelp" placeholder="Address">
+			    <small id="addressHelp" class="form-text text-muted">example: raNDu1gNyZ5hipBTKxm5zx7NovA1rNnNRf</small>
+			  </div>
 				<button type="button" class="btn btn-primary" id="btn">Parse</button>
 	    </div>
 	  </div>
@@ -44,13 +47,14 @@
 clear();
 $('#btn').click(function() {
    var raw = $('#ta').val();
+	 var address = $('#address').val();
 // gulp build doesnt work, and size is the same as metaparser so use metaparser
 //	 var balanceChangesB = rippleTransactionParser.parseBalanceChanges(raw);
 //	 var orderbookChangesB = rippleTransactionParser.parseOrderbookChanges(raw);
 clear();
 
-	 var balanceChanges = metaparser.balanceChanges(raw, 'rBio2LEemMsZsVFRm3GxNYfYtfKEKDYKmp', true);
-	 var orderbookChanges = metaparser.orderChanges(raw, 'rBio2LEemMsZsVFRm3GxNYfYtfKEKDYKmp', true);
+	 var balanceChanges = metaparser.balanceChanges(raw, address, true);
+	 var orderbookChanges = metaparser.orderChanges(raw, address, true);
 
 	 if (balanceChanges.length > 0){
 		 $('#balanceChangesTitle').show();
