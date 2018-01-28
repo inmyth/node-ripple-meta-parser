@@ -1,0 +1,14 @@
+{
+  "name": "node-ripple-meta-parser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "ripple-lib-transactionparser": "^0.6.2",
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Martin Utama",
+  "license": "ISC"
+}

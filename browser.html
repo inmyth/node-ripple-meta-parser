@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="./metaparser.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<title>Ripple Meta Reader</title>
+</head>
+
+<body>
+
+	<div class="container">
+	  <div class="row">
+	    <div class="col">
+				<div class="form-group">
+					<h5>Paste /transactions from Ripple Data Api</h5>
+					<p>example: <a href="https://data.ripple.com/v2/accounts/raNDu1gNyZ5hipBTKxm5zx7NovA1rNnNRf/transactions?result=tesSUCCESS&limit=40&start=2018-01-26&end=2018-01-29&descending=true">
+						https://data.ripple.com/v2/accounts/raNDu1gNyZ5hipBTKxm5zx7NovA1rNnNRf/transactions?result=tesSUCCESS&limit=40&start=2018-01-26&end=2018-01-29&descending=true<a/></p>
+
+					<textarea class="form-control" id="ta" rows="10"></textarea>
+				</div>
+				<button type="button" class="btn btn-primary" id="btn">Parse</button>
+	    </div>
+	  </div>
+	  <div class="row">
+     <div class="col">
+			 <h5 id="orderChangesTitle">Orderbook Changes, Normalized to Buy</h5>
+			 <pre id="orderChanges"></pre>
+			 <h5 id="balanceChangesTitle">Balance Changes</h5>
+			 <pre id="balanceChanges"></pre>
+	    </div>
+	  </div>
+	</div>
+
+</body>
+<script type="text/javascript">
+
+clear();
+$('#btn').click(function() {
+   var raw = $('#ta').val();
+// gulp build doesnt work, and size is the same as metaparser so use metaparser
+//	 var balanceChangesB = rippleTransactionParser.parseBalanceChanges(raw);
+//	 var orderbookChangesB = rippleTransactionParser.parseOrderbookChanges(raw);
+clear();
+
+	 var balanceChanges = metaparser.balanceChanges(raw, 'rBio2LEemMsZsVFRm3GxNYfYtfKEKDYKmp', true);
+	 var orderbookChanges = metaparser.orderChanges(raw, 'rBio2LEemMsZsVFRm3GxNYfYtfKEKDYKmp', true);
+
+	 if (balanceChanges.length > 0){
+		 $('#balanceChangesTitle').show();
+		 $('#balanceChanges').text(JSON.stringify(balanceChanges, undefined, 2));
+	 }
+	 else {
+		 $('#balanceChanges').text("Balance Change empty");
+	 }
+
+	 if (orderbookChanges.length > 0){
+		 $('#orderChangesTitle').show();
+		 $('#orderChanges').text(JSON.stringify(orderbookChanges, undefined, 2));
+	 }
+	 else {
+		 $('#orderChanges').text("Order Change empty");
+	 }
+});
+
+function clear(){
+	$('#orderChangesTitle').hide();
+	$('#balanceChangesTitle').hide();
+	$('#balanceChanges').empty();
+	$('#orderChanges').empty();
+
+}
+
+</script>
+
+</html>
