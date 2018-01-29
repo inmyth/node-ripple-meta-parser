@@ -15,8 +15,8 @@ function orderChanges(raw, myAddress, isDataAPI){
  return transactions
   .map(r => {
     let orderbookChanges =  parseOrderbookChanges(r.meta);
-    // console.log(r.hash);
-    // console.log(show(orderbookChanges));
+     console.log(r.hash);
+    console.log(show(orderbookChanges));
     return [{hash: r.hash, ledger_index: r.ledger_index, date: r.date}, orderbookChanges];
   })
   .map(z => {
