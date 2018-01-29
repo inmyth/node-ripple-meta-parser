@@ -64,10 +64,10 @@ function balanceChanges(raw, myAddress, isDataAPI){
   return transactions
   .map(r => {
     let balanceChanges = parseBalanceChanges(r.meta);
-    let myBalanceChanges = balanceChanges[myAddress]
-    .reduce((a, b) => a.concat(b), []);
+    let myBalanceChanges = balanceChanges[myAddress];
     return {hash: r.hash, ledger_index: r.ledger_index, date: r.date, data : myBalanceChanges};
   })
+  .filter(r => r.data !== undefined);
 }
 
 module.exports = {

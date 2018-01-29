@@ -22,9 +22,9 @@ function parsertest(){
 // let allnrf = balanceChanges(test1nrf, 'raNDu1gNyZ5hipBTKxm5zx7NovA1rNnNRf', true);
 // console.log(show(allnrf));
 
-  let kmpOrder = orderChanges(test1kmp, 'rBio2LEemMsZsVFRm3GxNYfYtfKEKDYKmp', true);
-  console.log(show(kmpOrder));
-  console.log('\n\n\n\n\n\n');
+  // let kmpOrder = orderChanges(test1kmp, 'rBio2LEemMsZsVFRm3GxNYfYtfKEKDYKmp', true);
+  // console.log(show(kmpOrder));
+  // console.log('\n\n\n\n\n\n');
   let kmpBalance = balanceChanges(test1kmp, 'rBio2LEemMsZsVFRm3GxNYfYtfKEKDYKmp', true);
   console.log(show(kmpBalance));
 }
