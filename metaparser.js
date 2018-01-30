@@ -89,7 +89,7 @@ function balanceToTrade(raw, myAddress, isDataAPI){
     let pay  = [];
     let fee  = [];
 
-    if (r.data.length == 2){ // order taken
+    if (r.data.length == 2){ // order taken or exchange
       for (var i = 0; i < r.data.length; i++){
         balanceToTradePusher(r.data[i], get, pay);
       }
@@ -109,6 +109,7 @@ function balanceToTrade(raw, myAddress, isDataAPI){
     }
     return {hash: r.hash, ledger_index: r.ledger_index, date: r.date, get : get, pay : pay, fee : fee};
   })
+  .filter(r => r.get.length > 0 && r.pay.length > 0);
 }
 
 function balanceToTradePusher(data, get, pay){
