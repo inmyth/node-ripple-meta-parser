@@ -1,8 +1,10 @@
 "use strict";
 
 const inspect = require('util').inspect;
+var Big = require('./big.min.js');
 const parseOrderbookChanges = require('ripple-lib-transactionparser').parseOrderbookChanges;
 const parseBalanceChanges = require('ripple-lib-transactionparser').parseBalanceChanges;
+
 
 function show(object){
   return inspect(object, false, null);
@@ -70,7 +72,50 @@ function balanceChanges(raw, myAddress, isDataAPI){
   .filter(r => r.data !== undefined);
 }
 
+
+const maxFeeXRP  = Big('0.0001');
+const zero = Big('0.0');
+function balanceToTrade(raw, myAddress, isDataAPI){
+  return balanceChanges(raw, myAddress, isDataAPI)
+  .filter(r => r.data.length > 1) // length 1 = payment or fees
+  .map(r => {
+    let get  = [];
+    let pay  = [];
+    let fee  = [];
+
+    if (r.data.length == 2){ // order taken
+      for (var i = 0; i < r.data.length; i++){
+        balanceToTradePusher(r.data[i], get, pay);
+      }
+    }
+    else {
+      // could be offerCreate + consumed (l = 3) or payment (l = anything)
+      // we need to filter out xrp fee
+      for (var i = 0; i < r.data.length; i++){
+        let d = r.data[i];
+        if (d.currency === 'XRP' && Big(d.value).lt(zero) && Big(d.value).abs().lt(maxFeeXRP)){
+          fee.push(d);
+        }
+        else{
+          balanceToTradePusher(d, get, pay);
+        }
+      }
+    }
+    return {hash: r.hash, ledger_index: r.ledger_index, date: r.date, get : get, pay : pay, fee : fee};
+  })
+}
+
+function balanceToTradePusher(data, get, pay){
+  if (Big(data.value).lt(zero)){
+    pay.push(data);
+  } else {
+    get.push(data);
+  }
+}
+
+
 module.exports = {
   balanceChanges : balanceChanges,
-  orderChanges  : orderChanges
+  orderChanges  : orderChanges,
+  balanceToTrade : balanceToTrade
 }
