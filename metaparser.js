@@ -23,9 +23,8 @@ function orderChanges(raw, myAddress, isDataAPI){
  return transactions
   .map(r => {
     let orderbookChanges =  parseOrderbookChanges(r.meta);
-     console.log(r.hash);
-    console.log(show(orderbookChanges));
-    return [{hash: r.hash, ledger_index: r.ledger_index, date: r.date}, orderbookChanges];
+    let basics = getBasics(isDataAPI ? r : r.tx);
+    return [{hash: basics.hash, ledger_index: basics.ledger_index, date: basics.date}, orderbookChanges];
   })
   .map(z => {
     let r = z[1];
@@ -66,14 +65,29 @@ function orderChanges(raw, myAddress, isDataAPI){
   })
 }
 
+function getBasics(root, isDataAPI){
+  let res = {
+    date : undefined,
+    hash : undefined,
+    ledger_index : undefined
+    }
+
+  res.date = isDataAPI ? root.date : new Date((parseInt(root.date) + 946684800) * 1000).toISOString();
+  res.hash = root.hash;
+  res.ledger_index = root.ledger_index;
+  return res;
+}
+
 function balanceChanges(raw, myAddress, isDataAPI){
   let json = JSON.parse(raw)
   let transactions = isDataAPI ? json.transactions : json.result.transactions;
+
   return transactions
   .map(r => {
     let balanceChanges = parseBalanceChanges(r.meta);
     let myBalanceChanges = balanceChanges[myAddress];
-    return {hash: r.hash, ledger_index: r.ledger_index, date: r.date, data : myBalanceChanges};
+    let basics = getBasics(isDataAPI ? r : r.tx);
+    return {hash: basics.hash, ledger_index: basics.ledger_index, date: basics.date, data : myBalanceChanges};
   })
   .filter(r => r.data !== undefined);
 }
