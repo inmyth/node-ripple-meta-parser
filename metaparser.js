@@ -23,7 +23,7 @@ function orderChanges(raw, myAddress, isDataAPI){
  return transactions
   .map(r => {
     let orderbookChanges =  parseOrderbookChanges(r.meta);
-    let basics = getBasics(isDataAPI ? r : r.tx);
+    let basics = getBasics(isDataAPI ? r : r.tx, isDataAPI);
     return [{hash: basics.hash, ledger_index: basics.ledger_index, date: basics.date}, orderbookChanges];
   })
   .map(z => {
@@ -72,7 +72,7 @@ function getBasics(root, isDataAPI){
     ledger_index : undefined
     }
 
-  res.date = isDataAPI ? root.date : new Date((parseInt(root.date) + 946684800) * 1000).toISOString();
+  res.date = isDataAPI ? new Date(root.date).toISOString() : new Date((parseInt(root.date) + 946684800) * 1000).toISOString();
   res.hash = root.hash;
   res.ledger_index = root.ledger_index;
   return res;
@@ -86,7 +86,7 @@ function balanceChanges(raw, myAddress, isDataAPI){
   .map(r => {
     let balanceChanges = parseBalanceChanges(r.meta);
     let myBalanceChanges = balanceChanges[myAddress];
-    let basics = getBasics(isDataAPI ? r : r.tx);
+    let basics = getBasics(isDataAPI ? r : r.tx, isDataAPI);
     return {hash: basics.hash, ledger_index: basics.ledger_index, date: basics.date, data : myBalanceChanges};
   })
   .filter(r => r.data !== undefined);

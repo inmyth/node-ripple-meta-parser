@@ -4,8 +4,24 @@ This parser processes the result of Ripple meta parser https://www.npmjs.com/pac
 ```
 balanceChanges(text, myAddress, isDataApi)
 orderChanges(text, myAddress, isDataApi)
+balanceToTrade(text, myAddress, isDataApi)
 ```
-text : the response
+*balanceChanges*
+
+Parses changes in balance using ripple-lib-transactionparser's parseBalanceChanges.
+
+*orderChanges*
+
+Parses executed orders from ripple-lib-transactionparser's parseOrderbookChanges.
+Do NOT use function. It cannot handle autobridge.
+
+*balanceToTrade*
+
+Parses executed orders from balanceChanges.
+
+*Params*
+
+text : the raw response from DataApi's transactions or Websocket's account_tx
 
 myAddress : address the response belongs to
 

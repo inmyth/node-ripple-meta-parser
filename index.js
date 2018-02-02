@@ -53,11 +53,11 @@ function parsertest(){
 //  let mikeeOrder_WHi = orderChanges(testMikee_WHi, "rMx55zk9XPUpKB6jijxtqT6pjAiSbSvWHi", true)
 //  console.log(show(mikeeOrder_WHi));
 
-// let b2t = balanceToTrade(test4items_Nrf, 'raNDu1gNyZ5hipBTKxm5zx7NovA1rNnNRf', true);
-// console.log(show(b2t));
+let b2t = balanceToTrade(test4items_Nrf, 'raNDu1gNyZ5hipBTKxm5zx7NovA1rNnNRf', true);
+console.log(show(b2t));
 
-let exch = orderChanges(testWs_Kmp, 'rBio2LEemMsZsVFRm3GxNYfYtfKEKDYKmp', false);
-console.log(show(exch));
+// let exch = balanceToTrade(testWs_Kmp, 'rBio2LEemMsZsVFRm3GxNYfYtfKEKDYKmp', false);
+// console.log(show(exch));
 }
 
 
