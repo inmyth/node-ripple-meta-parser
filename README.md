@@ -13,7 +13,7 @@ Parses changes in balance using ripple-lib-transactionparser's parseBalanceChang
 *orderChanges*
 
 Parses executed orders from ripple-lib-transactionparser's parseOrderbookChanges.
-Do NOT use function. It cannot handle autobridge.
+Do NOT use this function. It cannot handle autobridge.
 
 *balanceToTrade*
 
