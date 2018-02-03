@@ -87,7 +87,7 @@ function balanceChanges(raw, myAddress, isDataAPI){
 }
 
 
-const maxFeeXRP  = Big('0.0001');
+const maxFeeXRP  = Big('0.00012');
 const zero = Big('0.0');
 function balanceToTrade(raw, myAddress, isDataAPI){
   return balanceChanges(raw, myAddress, isDataAPI)
@@ -107,7 +107,7 @@ function balanceToTrade(raw, myAddress, isDataAPI){
       // we need to filter out xrp fee
       for (var i = 0; i < r.data.length; i++){
         let d = r.data[i];
-        if (d.currency === 'XRP' && Big(d.value).lt(zero) && Big(d.value).abs().lt(maxFeeXRP)){
+        if (d.currency === 'XRP' && Big(d.value).lt(zero) && Big(d.value).abs().lte(maxFeeXRP)){
           fee.push(d);
         }
         else{
@@ -117,15 +117,36 @@ function balanceToTrade(raw, myAddress, isDataAPI){
     }
     return {hash: r.hash, ledger_index: r.ledger_index, date: r.date, get : get, pay : pay, fee : fee};
   })
+  // exchange has only get or pay filled
   .filter(r => r.get.length > 0 && r.pay.length > 0);
 }
 
 function balanceToTradePusher(data, get, pay){
-  if (Big(data.value).lt(zero)){
+  let bigValue = Big(data.value);
+  data.value = toFixed(data.value);  
+  if (bigValue.lt(zero)){
     pay.push(data);
   } else {
     get.push(data);
   }
+}
+
+function toFixed(x) {
+  if (Math.abs(x) < 1.0) {
+    var e = parseInt(x.toString().split('e-')[1]);
+    if (e) {
+        x *= Math.pow(10,e-1);
+        x = '0.' + (new Array(e)).join('0') + x.toString().substring(2);
+    }
+  } else {
+    var e = parseInt(x.toString().split('+')[1]);
+    if (e > 20) {
+        e -= 20;
+        x /= Math.pow(10,e);
+        x += (new Array(e+1)).join('0');
+    }
+  }
+  return x;
 }
 
 
