@@ -94,7 +94,7 @@ function balanceToTrade(raw, myAddress, isDataAPI, maxFeeXRP = '0.00012'){
     let get  = [];
     let pay  = [];
     let fee  = [];
-    const bigMaxFeeXRP  = Big(maxFeeXRP);
+    let bigMaxFeeXRP  = Big(maxFeeXRP);
 
     if (r.data.length == 2){ // order taken or exchange
       for (var i = 0; i < r.data.length; i++){

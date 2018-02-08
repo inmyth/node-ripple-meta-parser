@@ -29,6 +29,12 @@ isDataApi (boolean) : true if response comes from DataApi (/transactions), false
 
 maxFeeXRP (string) : transaction's maxFee in XRP, default is 0.00012
 
+#### Dependencies
+ripple-lib-transactionparser
+```
+npm i ripple-lib-transactionparser
+```
+
 #### Make module from Browserify
 Transform the module to js library for browser.
 First install browserify.
