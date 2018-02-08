@@ -46,14 +46,14 @@ function parsertest(){
   // let kmpOrder = orderChanges(test1kmp, 'rBio2LEemMsZsVFRm3GxNYfYtfKEKDYKmp', true);
   // console.log(show(kmpOrder));
   // console.log('\n\n\n\n\n\n');
-  // let kmpBalance = balanceChanges(test1kmp, 'rBio2LEemMsZsVFRm3GxNYfYtfKEKDYKmp', true);
-  // console.log(show(kmpBalance));
+// let kmpBalance = balanceToTrade(test1kmp, 'rBio2LEemMsZsVFRm3GxNYfYtfKEKDYKmp', true);
+// console.log(show(kmpBalance));
 
 //  let mikeeOrder_v1y = orderChanges(testMikee_v1y, "rGMNHZyj7NizdpDYW4mLZeeWEXeMm6Vv1y", true)
 //  console.log(show(mikeeOrder_v1y));
 
-//  let mikeeOrder_WHi = orderChanges(testMikee_WHi, "rMx55zk9XPUpKB6jijxtqT6pjAiSbSvWHi", true)
-//  console.log(show(mikeeOrder_WHi));
+ // let mikeeOrder_WHi = balanceToTrade(testMikee_WHi, "rMx55zk9XPUpKB6jijxtqT6pjAiSbSvWHi", true)
+ // console.log(show(mikeeOrder_WHi));
 
 // let b2t = balanceToTrade(test4items_Nrf, 'raNDu1gNyZ5hipBTKxm5zx7NovA1rNnNRf', true);
 // console.log(show(b2t));
@@ -61,8 +61,8 @@ function parsertest(){
 // let exch = balanceToTrade(testWs_Kmp, 'rBio2LEemMsZsVFRm3GxNYfYtfKEKDYKmp', false);
 // console.log(show(exch));
 
- let small = balanceToTrade(supersmallAmount_Kmp, 'rBio2LEemMsZsVFRm3GxNYfYtfKEKDYKmp', true);
- console.log(show(small));
+ // let small = balanceToTrade(supersmallAmount_Kmp, 'rBio2LEemMsZsVFRm3GxNYfYtfKEKDYKmp', true);
+ // console.log(show(small));
 }
 
 

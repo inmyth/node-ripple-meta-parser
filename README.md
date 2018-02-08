@@ -4,7 +4,7 @@ This parser processes the result of Ripple meta parser https://www.npmjs.com/pac
 ```
 balanceChanges(text, myAddress, isDataApi)
 orderChanges(text, myAddress, isDataApi)
-balanceToTrade(text, myAddress, isDataApi)
+balanceToTrade(text, myAddress, isDataApi, maxFeeXRP = '0.00012')
 ```
 *balanceChanges*
 
@@ -27,13 +27,14 @@ myAddress : address the response belongs to
 
 isDataApi (boolean) : true if response comes from DataApi (/transactions), false if from RippleApi web socket (tx, account_tx, ...)
 
+maxFeeXRP (string) : transaction's maxFee in XRP, default is 0.00012
+
 #### Make module from Browserify
 Transform the module to js library for browser.
 First install browserify.
 
 ```
 npm install -g browserify
-
 ```
 
 Run it to create a js library
@@ -43,6 +44,5 @@ browserify main.js --s metaparser > metaparser.js
 
 Then in html
 ```
-
 <script>metaparser.orderChanges(text, myRippleAddress, true);</script>
 ```

@@ -10,7 +10,7 @@ const inspect = require('util').inspect;
 var Big = require('./big.min.js');
 const parseOrderbookChanges = require('ripple-lib-transactionparser').parseOrderbookChanges;
 const parseBalanceChanges = require('ripple-lib-transactionparser').parseBalanceChanges;
-
+const zero = Big('0.0');
 
 function show(object){
   return inspect(object, false, null);
@@ -93,15 +93,14 @@ function balanceChanges(raw, myAddress, isDataAPI){
 }
 
 
-const maxFeeXRP  = Big('0.00012');
-const zero = Big('0.0');
-function balanceToTrade(raw, myAddress, isDataAPI){
+function balanceToTrade(raw, myAddress, isDataAPI, maxFeeXRP = '0.00012'){
   return balanceChanges(raw, myAddress, isDataAPI)
   .filter(r => r.data.length > 1) // length 1 = payment or fees
   .map(r => {
     let get  = [];
     let pay  = [];
     let fee  = [];
+    const bigMaxFeeXRP  = Big(maxFeeXRP);
 
     if (r.data.length == 2){ // order taken or exchange
       for (var i = 0; i < r.data.length; i++){
@@ -113,7 +112,7 @@ function balanceToTrade(raw, myAddress, isDataAPI){
       // we need to filter out xrp fee
       for (var i = 0; i < r.data.length; i++){
         let d = r.data[i];
-        if (d.currency === 'XRP' && Big(d.value).lt(zero) && Big(d.value).abs().lte(maxFeeXRP)){
+        if (d.currency === 'XRP' && Big(d.value).lt(zero) && Big(d.value).abs().lte(bigMaxFeeXRP)){
           fee.push(d);
         }
         else{
@@ -129,7 +128,7 @@ function balanceToTrade(raw, myAddress, isDataAPI){
 
 function balanceToTradePusher(data, get, pay){
   let bigValue = Big(data.value);
-  data.value = toFixed(data.value);  
+  data.value = toFixed(data.value);
   if (bigValue.lt(zero)){
     pay.push(data);
   } else {
