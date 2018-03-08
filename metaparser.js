@@ -136,22 +136,33 @@ function balanceToTradePusher(data, get, pay){
   }
 }
 
-function toFixed(x) {
-  if (Math.abs(x) < 1.0) {
-    var e = parseInt(x.toString().split('e-')[1]);
-    if (e) {
-        x *= Math.pow(10,e-1);
-        x = '0.' + (new Array(e)).join('0') + x.toString().substring(2);
-    }
-  } else {
-    var e = parseInt(x.toString().split('+')[1]);
-    if (e > 20) {
-        e -= 20;
-        x /= Math.pow(10,e);
-        x += (new Array(e+1)).join('0');
-    }
+function toFixed(num) {
+  let numStr = String(num);
+
+  if (Math.abs(num) < 1.0)
+  {
+      let e = parseInt(num.toString().split('e-')[1]);
+      if (e)
+      {
+          let negative = num < 0;
+          if (negative) num *= -1
+          num *= Math.pow(10, e - 1);
+          numStr = '0.' + (new Array(e)).join('0') + num.toString().substring(2);
+          if (negative) numStr = "-" + numStr;
+      }
   }
-  return x;
+  else
+  {
+      let e = parseInt(num.toString().split('+')[1]);
+      if (e > 20)
+      {
+          e -= 20;
+          num /= Math.pow(10, e);
+          numStr = num.toString() + (new Array(e + 1)).join('0');
+      }
+  }
+
+  return numStr;
 }
 
 
