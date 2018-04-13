@@ -88,7 +88,7 @@ function balanceChanges(raw, myAddress, isDataAPI){
     let balanceChanges = parseBalanceChanges(r.meta);
     let myBalanceChanges = balanceChanges[myAddress];
     let basics = getBasics(isDataAPI ? r : r.tx, isDataAPI);
-    let feeXRP = r.tx.Account === myAddress ? (Big(r.tx.Fee).div(million)) : 0;
+    let feeXRP = r.tx.Account === myAddress ? (Big(r.tx.Fee).div(million)) : zero;
     return {hash: basics.hash, ledger_index: basics.ledger_index, date: basics.date, feeXRP : feeXRP, data : myBalanceChanges};
   })
   .filter(r => r.data !== undefined);
