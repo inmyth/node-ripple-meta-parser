@@ -11,6 +11,7 @@ var Big = require('./big.min.js');
 const parseOrderbookChanges = require('ripple-lib-transactionparser').parseOrderbookChanges;
 const parseBalanceChanges = require('ripple-lib-transactionparser').parseBalanceChanges;
 const zero = Big('0.0');
+const million = Big('1000000')
 
 function show(object){
   return inspect(object, false, null);
@@ -87,40 +88,33 @@ function balanceChanges(raw, myAddress, isDataAPI){
     let balanceChanges = parseBalanceChanges(r.meta);
     let myBalanceChanges = balanceChanges[myAddress];
     let basics = getBasics(isDataAPI ? r : r.tx, isDataAPI);
-    return {hash: basics.hash, ledger_index: basics.ledger_index, date: basics.date, data : myBalanceChanges};
+    let feeXRP = r.tx.Account === myAddress ? (Big(r.tx.Fee).div(million)) : 0;
+    return {hash: basics.hash, ledger_index: basics.ledger_index, date: basics.date, feeXRP : feeXRP, data : myBalanceChanges};
   })
   .filter(r => r.data !== undefined);
 }
 
 
-function balanceToTrade(raw, myAddress, isDataAPI, maxFeeXRP = '0.00012'){
+function balanceToTrade(raw, myAddress, isDataAPI){
   return balanceChanges(raw, myAddress, isDataAPI)
   .filter(r => r.data.length > 1) // length 1 = payment or fees
   .map(r => {
     let get  = [];
     let pay  = [];
-    let fee  = [];
-    let bigMaxFeeXRP  = Big(maxFeeXRP);
+    let feeXRP  = r.feeXRP;
 
-    if (r.data.length == 2){ // order taken or exchange
-      for (var i = 0; i < r.data.length; i++){
-        balanceToTradePusher(r.data[i], get, pay);
-      }
-    }
-    else {
-      // could be offerCreate + consumed (l = 3) or payment (l = anything)
-      // we need to filter out xrp fee
-      for (var i = 0; i < r.data.length; i++){
-        let d = r.data[i];
-        if (d.currency === 'XRP' && Big(d.value).lt(zero) && Big(d.value).abs().lte(bigMaxFeeXRP)){
-          fee.push(d);
+    r.data.forEach(d => balanceToTradePusher(d, get, pay))
+    if (feeXRP.gt(zero)){
+      pay = pay
+      .map(z => {
+        if(z.currency === "XRP"){
+          z.value = toFixed(Big(z.value).plus(feeXRP).toFixed(6));
         }
-        else{
-          balanceToTradePusher(d, get, pay);
-        }
-      }
+        return z;
+      })
+      .filter(z => !Big(z.value).eq(zero))
     }
-    return {hash: r.hash, ledger_index: r.ledger_index, date: r.date, get : get, pay : pay, fee : fee};
+    return {hash: r.hash, ledger_index: r.ledger_index, date: r.date, get : get, pay : pay, fee : toFixed(feeXRP)};
   })
   // exchange has only get or pay filled
   .filter(r => r.get.length > 0 && r.pay.length > 0);

@@ -1,3 +1,7 @@
+1.2.0
+- fixed fee. Fee is now matched against tx.Fee 
+
+
 1.1.1
 - parametrized maxFeeXRP on balanceToTrade
 
